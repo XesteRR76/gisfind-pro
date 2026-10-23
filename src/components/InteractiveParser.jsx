@@ -256,7 +256,7 @@ export default function InteractiveParser() {
       {/* Main Grid: Leads List + Live Map */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Leads List */}
-        <div className="lg:col-span-7 space-y-4 max-h-[620px] overflow-y-auto pr-1">
+        <div className="lg:col-span-7 space-y-4 max-h-[640px] overflow-y-auto pr-2 pt-1 scroll-smooth">
           {filteredLeads.length === 0 ? (
             <div className="glass-card p-12 text-center rounded-2xl text-slate-400 space-y-3">
               <Search className="w-10 h-10 text-slate-600 mx-auto" />

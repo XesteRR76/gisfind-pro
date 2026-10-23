@@ -16,11 +16,16 @@ export default function LeadMap({ leads, selectedLead, onSelectLead, center = [5
         zoomControl: true,
       });
 
-      // CartoDB Dark Matter tiles (sleek dark aesthetic)
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a> | 2GIS / OSM',
-        maxZoom: 19,
-        subdomains: 'abcd',
+      // Clean ESRI Dark Canvas basemap (100% free, no API keys, no watermarks)
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri, DeLorme, NAVTEQ | 2GIS / OpenStreetMap',
+        maxZoom: 16,
+      }).addTo(map);
+
+      // ESRI Dark Canvas reference labels (streets, districts in RU/EN)
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '',
+        maxZoom: 16,
       }).addTo(map);
 
       mapInstanceRef.current = map;
@@ -90,9 +95,22 @@ export default function LeadMap({ leads, selectedLead, onSelectLead, center = [5
         onSelectLead(lead);
       });
 
+      if (isSelected) {
+        marker.openPopup();
+      }
+
       markersRef.current.push(marker);
     });
   }, [leads, selectedLead, onSelectLead]);
+
+  // Smoothly fly to selected lead when it changes
+  useEffect(() => {
+    if (selectedLead?.coords && mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo(selectedLead.coords, 14, {
+        duration: 1.0,
+      });
+    }
+  }, [selectedLead]);
 
   return (
     <div className="relative w-full h-[450px] lg:h-[580px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
